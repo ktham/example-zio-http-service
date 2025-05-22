@@ -1,0 +1,15 @@
+# MacOS
+*.DS_Store
+
+# Ignore IDE files
+.idea/
+.bsp/
+
+# Build files
+out/
+
+# Java, Scala, Package Files
+*.bak
+*.class
+*.jar
+*.log

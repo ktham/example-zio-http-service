@@ -1,0 +1,6 @@
+<configuration>
+    <!-- Raise the default logging level to ERROR to reduce logging output for increased test output clarity  -->
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>

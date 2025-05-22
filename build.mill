@@ -1,0 +1,41 @@
+package build
+
+import mill._, scalalib._
+
+object server extends ScalaModule {
+  override def scalaVersion = "3.3.6"
+
+  def scalacOptions = super.scalacOptions() ++ Seq(
+    "-encoding",
+    "UTF-8",
+    "-deprecation",
+    "-unchecked",
+    "-feature",
+    "-Xfatal-warnings"
+  )
+
+  def mainClass = Some("server.AppServer")
+
+  override def ivyDeps = super.ivyDeps() ++ Agg(
+    // Logging
+    ivy"ch.qos.logback:logback-classic:1.5.18",
+    ivy"com.typesafe.scala-logging::scala-logging:3.9.5",
+
+    // Zio HTTP
+    ivy"dev.zio::zio-http:3.2.0",
+
+    // Config
+    ivy"org.pkl-lang:pkl-config-java:0.28.2",
+  )
+
+  val zioTestVersion = "2.1.18"
+
+  object test extends ScalaTests {
+    override def ivyDeps = Agg(
+      ivy"dev.zio::zio-test:${zioTestVersion}",
+      ivy"dev.zio::zio-test-magnolia:${zioTestVersion}",
+      ivy"dev.zio::zio-test-sbt:${zioTestVersion}",
+    )
+    override def testFramework = "zio.test.sbt.ZTestFramework"
+  }
+}
