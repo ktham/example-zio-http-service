@@ -1,0 +1,63 @@
+name: "CI"
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: "Run Tests"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java:
+          - "21"
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b #v4.6.0
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.java }}
+
+      - name: Cache dependencies
+        uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c #v6.4.7
+        with:
+          extraFiles: "build.mill"
+
+      - name: Run Tests
+        run: ./mill server.test.test
+
+  build:
+    name: "Build Image"
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed for Github OIDC (source: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#adding-permissions-settings)
+      id-token: write
+      # Needed for actions/checkout
+      contents: read
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Build Image
+        run: podman build -t example-zio-http-service:${GITHUB_SHA} .
+
+      - name: Sanity Check Image (Run container in background)
+        run: podman run --rm -p 8080:8080 --name test_container -d example-zio-http-service:${GITHUB_SHA}
+
+      - name: Sanity Check Image (Ensure GET /ping responds with HTTP 200)
+        run: wget --retry-connrefused --waitretry=1 --timeout=5 --tries 20 --quiet --output-document=- localhost:8080/ping
+
+      - name: Sanity Check Image (Clean up)
+        if: always()
+        run: podman container stop test_container
