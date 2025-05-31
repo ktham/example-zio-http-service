@@ -1,17 +1,19 @@
 package build
 
 import mill._, scalalib._
+import $ivy.`com.lihaoyi::mill-contrib-scoverage:`
+import mill.contrib.scoverage.ScoverageModule
 
-object server extends ScalaModule {
+object server extends ScoverageModule {
   override def scalaVersion = "3.3.6"
+  override def scoverageVersion = "2.3.0"
 
   def scalacOptions = super.scalacOptions() ++ Seq(
-    "-encoding",
-    "UTF-8",
+    "-encoding", "UTF-8",
     "-deprecation",
     "-unchecked",
     "-feature",
-    "-Xfatal-warnings"
+    "-Xfatal-warnings",
   )
 
   def mainClass = Some("server.AppServer")
@@ -30,7 +32,7 @@ object server extends ScalaModule {
 
   val zioTestVersion = "2.1.18"
 
-  object test extends ScalaTests {
+  object test extends ScoverageTests {
     override def ivyDeps = Agg(
       ivy"dev.zio::zio-test:${zioTestVersion}",
       ivy"dev.zio::zio-test-magnolia:${zioTestVersion}",

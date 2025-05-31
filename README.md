@@ -23,13 +23,32 @@ This is an example implementation of a basic Scala HTTP service using:
 ### Running Tests
 
 ```
-./mill server.test.test
+# Compile with scoverage instrumentation
+./mill server.scoverage.compile
+
+# Execute the tests
+./mill server.test
+
+# Generate the HTML report
+./mill server.scoverage.htmlReport
 ```
 
 ### Starting The Server
 
+There are multiple ways to start up the web server.
+
+#### Using Mill
+This is the quickest way to start the server.
+
+```
+./mill server.run
+```
+
 #### From The Executable JAR
-This will use the JVM specified by the `JAVA_HOME` environment variable
+This builds an executable jar.
+This is how we would start the server in a production and containerized environment.
+
+Note that it will use the JVM specified by the `JAVA_HOME` environment variable.
 
 ```
 # This will generate the assembly jar
@@ -40,6 +59,8 @@ This will use the JVM specified by the `JAVA_HOME` environment variable
 ```
 
 #### From within a container
+This builds a container image that contains the executable jar of our server.
+
 ```
 podman compose up
 ```

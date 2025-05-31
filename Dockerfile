@@ -19,7 +19,7 @@ RUN ./mill show server.assembly
 ################################################################################
 ### Final Image
 ################################################################################
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre-alpine-3.21
 
 # Ensure DNS lookups aren't indefinitely cached
 RUN sed -i 's/#networkaddress.cache.ttl.*/networkaddress.cache.ttl=10/' /opt/java/openjdk/conf/security/java.security
