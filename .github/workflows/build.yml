@@ -36,6 +36,7 @@ jobs:
 
   build:
     name: "Build Image"
+    needs: [test]
     runs-on: ubuntu-latest
     permissions:
       # Needed for Github OIDC (source: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#adding-permissions-settings)

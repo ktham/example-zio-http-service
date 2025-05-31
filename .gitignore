@@ -1,12 +1,18 @@
 # MacOS
 *.DS_Store
 
+# direnv
+.direnv
+
 # Ignore IDE files
 .idea/
 .bsp/
 
 # Build files
 out/
+.bloop
+.bsp
+.metals
 
 # Java, Scala, Package Files
 *.bak
