@@ -16,8 +16,14 @@
         # The packages available in the development shell created by running `nix develop`
         devShell = pkgs.mkShell {
           packages = [
-            pkgs.temurin-bin # latest LTS release from Temurin OpenJDK distribution
-            pkgs.metals # language server for Scala
+            # Intellij CE IDE with Scala Plugin
+            (pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea-community ["scala"])
+
+            # latest LTS release from Temurin OpenJDK distribution
+            pkgs.temurin-bin
+
+            # language server for Scala (if using an editor like VS Code or Zed)
+            pkgs.metals
           ];
         };
       }

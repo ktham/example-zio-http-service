@@ -20,6 +20,19 @@ This is an example implementation of a basic Scala HTTP service using:
   * On MacOS: `brew install podman-compose`
   * On Ubuntu: `apt-get install -y python3-pip` then `pip3 install podman-compose`
 
+### Using Intellij
+The Nix development shell includes Intellij CE with the Scala plugin installed.
+
+```
+# Start a development shell if not already in one:
+> nix develop
+# Then start Intellij and pass in the current directory:
+(nix:nix-shell-env) bash-5.2$ idea .
+```
+
+This installation of Intellij launched through the Nix development shell should
+also pick up the dev shell's JDK and Scala SDK.
+
 ### Running Tests
 
 ```
