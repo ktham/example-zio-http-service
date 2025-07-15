@@ -1,14 +1,14 @@
+//| mvnDeps: ["com.lihaoyi::mill-contrib-scoverage:$MILL_VERSION"]
 package build
 
-import mill._, scalalib._
-import $ivy.`com.lihaoyi::mill-contrib-scoverage:`
+import mill.*, scalalib.*
 import mill.contrib.scoverage.ScoverageModule
 
 object server extends ScoverageModule {
   override def scalaVersion = "3.3.6"
   override def scoverageVersion = "2.3.0"
 
-  def scalacOptions = super.scalacOptions() ++ Seq(
+  def scalacOptions: T[Seq[String]] = Seq(
     "-encoding", "UTF-8",
     "-deprecation",
     "-unchecked",
@@ -16,28 +16,28 @@ object server extends ScoverageModule {
     "-Xfatal-warnings",
   )
 
-  def mainClass = Some("server.AppServer")
+  def mainClass: T[Option[String]] = Some("server.AppServer")
 
-  override def ivyDeps = super.ivyDeps() ++ Agg(
+  def mvnDeps = Seq(
     // Logging
-    ivy"ch.qos.logback:logback-classic:1.5.18",
-    ivy"com.typesafe.scala-logging::scala-logging:3.9.5",
+    mvn"ch.qos.logback:logback-classic:1.5.18",
+    mvn"com.typesafe.scala-logging::scala-logging:3.9.5",
 
     // Zio HTTP
-    ivy"dev.zio::zio-http:3.2.0",
+    mvn"dev.zio::zio-http:3.3.3",
 
     // Config
-    ivy"org.pkl-lang:pkl-config-java:0.28.2",
+    mvn"org.pkl-lang:pkl-config-java:0.28.2",
   )
 
-  val zioTestVersion = "2.1.18"
+  val zioTestVersion = "2.1.19"
 
   object test extends ScoverageTests {
-    override def ivyDeps = Agg(
-      ivy"dev.zio::zio-test:${zioTestVersion}",
-      ivy"dev.zio::zio-test-magnolia:${zioTestVersion}",
-      ivy"dev.zio::zio-test-sbt:${zioTestVersion}",
+    def mvnDeps = Seq(
+      mvn"dev.zio::zio-test:${zioTestVersion}",
+      mvn"dev.zio::zio-test-magnolia:${zioTestVersion}",
+      mvn"dev.zio::zio-test-sbt:${zioTestVersion}",
     )
-    override def testFramework = "zio.test.sbt.ZTestFramework"
+    def testFramework = "zio.test.sbt.ZTestFramework"
   }
 }
