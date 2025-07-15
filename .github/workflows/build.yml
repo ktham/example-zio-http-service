@@ -32,7 +32,7 @@ jobs:
           extraFiles: "build.mill"
 
       - name: Run Tests
-        run: ./mill server.test.test
+        run: ./mill server.test
 
   build:
     name: "Build Image"
