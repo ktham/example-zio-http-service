@@ -24,6 +24,9 @@
 
             # language server for Scala (if using an editor like VS Code or Zed)
             pkgs.metals
+
+            # Scala Repl for testing
+            pkgs.scala
           ];
         };
       }
